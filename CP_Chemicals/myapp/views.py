@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.http import HttpResponse
 
-# Create your views here.
+def home(request):
+    """
+    A simple view function that returns an HTTP response with a greeting.
+    This function will be called when a user navigates to the root URL.
+    """
+    return HttpResponse("Hello, World! Welcome to the  CP Chemicals Order Management System Development.")
