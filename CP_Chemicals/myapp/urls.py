@@ -2,8 +2,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    # The 'path' function maps a URL to a view function.
-    # The empty string '' represents the root URL (e.g., http://127.0.0.1:8000/).
-    # It calls the 'home' function from the 'views.py' file.
+    # This path handles your traditional Django view at the root URL.
     path('', views.home, name='home'),
+    
+    # This path handles your DRF view at the 'mymodels/' endpoint.
+    path('mymodels/', views.MyModelListCreateView.as_view()),
 ]

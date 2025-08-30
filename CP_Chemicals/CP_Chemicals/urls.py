@@ -22,5 +22,7 @@ urlpatterns = [
     # When a user visits the root URL (e.g., http://127.0.0.1:8000/),
     # Django will look for the corresponding view in myapp/urls.py.
     path('', include('myapp.urls')),
+     path('api/', include('myapp.urls')),
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls'))
 ]

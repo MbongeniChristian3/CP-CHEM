@@ -1,8 +1,15 @@
-from django.http import HttpResponse
+# myapp/views.py
 
+from django.shortcuts import render
+from rest_framework import generics
+from .models import MyModel
+from .serializers import MyModelSerializer
+
+# Django View for a traditional web page
 def home(request):
-    """
-    A simple view function that returns an HTTP response with a greeting.
-    This function will be called when a user navigates to the root URL.
-    """
-    return HttpResponse("Hello, World! Welcome to the  CP Chemicals Order Management System Development.")
+    return render(request, 'myapp/home.html')
+
+# Django REST Framework View for an API endpoint
+class MyModelListCreateView(generics.ListCreateAPIView):
+    queryset = MyModel.objects.all()
+    serializer_class = MyModelSerializer
