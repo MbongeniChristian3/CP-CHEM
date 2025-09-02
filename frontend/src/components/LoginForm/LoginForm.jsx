@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LoginForm.css';
 
+
 const LoginForm = () => {
     const [view, setView] = useState('login');
     const [email, setEmail] = useState('');
