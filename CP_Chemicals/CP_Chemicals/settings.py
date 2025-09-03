@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'myapp.apps.MyappConfig',
     'rest_framework_simplejwt',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,6 +74,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CP_Chemicals.wsgi.application'
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://192.168.1.103:3000",
+]
+
+# Or to allow all origins during development
+# CORS_ALLOW_ALL_ORIGINS = True
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -81,7 +90,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
