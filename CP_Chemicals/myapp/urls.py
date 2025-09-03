@@ -1,10 +1,17 @@
+# myapp/urls.py
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    # This path handles your traditional Django view at the root URL.
+    # Traditional web page
     path('', views.home, name='home'),
     
-    # This path handles your DRF view at the 'mymodels/' endpoint.
-    path('mymodels/', views.MyModelListCreateView.as_view()),
+    # Authentication API endpoints
+    path('api/login/', views.login_view, name='login'),
+    path('api/register/', views.register_view, name='register'),
+    path('api/user/', views.user_profile_view, name='user_profile'),
+    path('api/logout/', views.logout_view, name='logout'),
+    
+    # Your existing API endpoint
+    path('api/mymodel/', views.MyModelListCreateView.as_view(), name='mymodel-list-create')
 ]
