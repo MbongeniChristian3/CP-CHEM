@@ -10,14 +10,20 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url('https://images.unsplash.com/photo-1574263867128-a3d5c1b1deec?fit=crop&w=1920&q=80') no-repeat center center/cover;
+    background-image: url('./assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     position: relative;
 }
+    
+
 
 /* The form box is now semi-transparent with green overlay */
 .form-box {
     width: 400px;
-    background: rgba(46, 125, 50, 0.85); /* Semi-transparent green */
+    background: rgba(10, 128, 16, 0.85); /* Semi-transparent green */
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     padding: 40px 30px;
