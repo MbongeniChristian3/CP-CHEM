@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './LoginForm.css';
+
+// Configure axios defaults
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const LoginForm = () => {
     const [view, setView] = useState('login');
-    const [username, setUsername] = useState(''); // Changed from email to username
-    const [email, setEmail] = useState(''); // Only for registration
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState(''); // For registration
-    const [lastName, setLastName] = useState(''); // For registration
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -19,25 +24,18 @@ const LoginForm = () => {
         setLoading(true);
         
         try {
-            const response = await fetch(' http://127.0.0.1:8000/api/login/', { // Fixed URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }), // Changed from email to username
+            const response = await axios.post('/api/login/', {
+                username,
+                password
             });
             
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed. Please check your credentials.');
-            }
+            const data = response.data;
             
             if (data.success) {
                 console.log('Login successful:', data);
                 setMessage('Login successful! Welcome.');
                 
-                // Store tokens in localStorage (optional)
+                // Store tokens in localStorage
                 if (data.tokens) {
                     localStorage.setItem('access_token', data.tokens.access);
                     localStorage.setItem('refresh_token', data.tokens.refresh);
@@ -46,13 +44,26 @@ const LoginForm = () => {
                 // Store user data
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
-                // Redirect to dashboard or main app (you can customize this)
+                // Optional: Redirect to dashboard
                 // window.location.href = '/dashboard';
             } else {
                 throw new Error(data.message || 'Login failed');
             }
         } catch (err) {
-            setError(err.message);
+            console.error('Login error:', err);
+            
+            // Handle different types of errors
+            if (err.response) {
+                // Server responded with error status
+                const errorData = err.response.data;
+                setError(errorData.message || `Login failed: ${err.response.status}`);
+            } else if (err.request) {
+                // Request was made but no response received
+                setError('Failed to connect to server. Please check if the server is running.');
+            } else {
+                // Something else happened
+                setError(err.message || 'An unexpected error occurred');
+            }
         } finally {
             setLoading(false);
         }
@@ -65,25 +76,15 @@ const LoginForm = () => {
         setLoading(true);
         
         try {
-            const response = await fetch(' http://127.0.0.1:8000/api/register/', { // Fixed URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    username, 
-                    email, 
-                    password,
-                    first_name: firstName,
-                    last_name: lastName
-                }),
+            const response = await axios.post('/api/register/', {
+                username,
+                email,
+                password,
+                first_name: firstName,
+                last_name: lastName
             });
             
-            const data = await response.json();
-            
-            if (!response.ok) {
-                throw new Error(data.message || 'Registration failed. Please try again.');
-            }
+            const data = response.data;
             
             if (data.success) {
                 console.log('Registration successful:', data);
@@ -99,7 +100,20 @@ const LoginForm = () => {
                 throw new Error(data.message || 'Registration failed');
             }
         } catch (err) {
-            setError(err.message);
+            console.error('Registration error:', err);
+            
+            // Handle different types of errors
+            if (err.response) {
+                // Server responded with error status
+                const errorData = err.response.data;
+                setError(errorData.message || `Registration failed: ${err.response.status}`);
+            } else if (err.request) {
+                // Request was made but no response received
+                setError('Failed to connect to server. Please check if the server is running.');
+            } else {
+                // Something else happened
+                setError(err.message || 'An unexpected error occurred');
+            }
         } finally {
             setLoading(false);
         }
@@ -152,7 +166,6 @@ const LoginForm = () => {
                                 />
                             </div>
                         </div>
-
                         <div className='form-group'>
                             <label htmlFor="firstName">First Name</label>
                             <div className='input-box'>
@@ -165,7 +178,6 @@ const LoginForm = () => {
                                 />
                             </div>
                         </div>
-
                         <div className='form-group'>
                             <label htmlFor="lastName">Last Name</label>
                             <div className='input-box'>
