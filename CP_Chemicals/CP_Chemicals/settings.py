@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-p4-atr8#%ts7s3=t_1*p%whh&p!9e26wru@x-+6dtm=t^z424h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -75,8 +75,13 @@ WSGI_APPLICATION = 'CP_Chemicals.wsgi.application'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://192.168.1.103:3000",
+    "http://localhost:3004",  # For local development
+    "http://127.0.0.1:3000",  # Alternative localhost
+    "http://192.168.1.103:3004",  # Your current setting
 ]
+
+# Or for development, temporarily use:
+CORS_ALLOW_ALL_ORIGINS = True  # Remove in production!
 
 # Or to allow all origins during development
 # CORS_ALLOW_ALL_ORIGINS = True
