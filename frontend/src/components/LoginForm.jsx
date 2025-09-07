@@ -39,13 +39,16 @@ const LoginForm = () => {
                 if (data.tokens) {
                     localStorage.setItem('access_token', data.tokens.access);
                     localStorage.setItem('refresh_token', data.tokens.refresh);
+                    // Also store as 'token' for compatibility
+                    localStorage.setItem('token', data.tokens.access);
                 }
                 
                 // Store user data
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
-                // Optional: Redirect to dashboard
-                // window.location.href = '/dashboard';
+                // For now, just show success message - no navigation
+                console.log('User logged in successfully, tokens stored');
+                
             } else {
                 throw new Error(data.message || 'Login failed');
             }
