@@ -77,11 +77,9 @@ WSGI_APPLICATION = 'CP_Chemicals.wsgi.application'
 
 # CORS Configuration - FIXED
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",    # React dev server default
-    "http://localhost:3001",    # Your React app port
-    "http://127.0.0.1:3000",   # Alternative localhost
-    "http://127.0.0.1:3001",   # Alternative localhost with your port
-    "http://192.168.1.103:3001",  # Your network IP
+    "http://localhost:3000", # Still good practice to keep this
+    "http://localhost:3001", # Add your frontend's new origin
+    "http://127.0.0.1:3001", # Add this for consistency
 ]
 
 # For development only - remove in production!

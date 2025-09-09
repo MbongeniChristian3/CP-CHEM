@@ -3,7 +3,7 @@ import axios from 'axios';
 import './LoginForm.css';
 
 // Configure axios defaults - FIXED
-axios.defaults.baseURL = 'http://localhost:8000/';  // Changed from 127.0.0.1 to localhost
+axios.defaults.baseURL = 'http://127.0.0.1:8000//';  // Changed from 127.0.0.1 to localhost
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const LoginForm = () => {
