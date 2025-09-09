@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-p4-atr8#%ts7s3=t_1*p%whh&p!9e26wru@x-+6dtm=t^z424h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -74,17 +75,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'CP_Chemicals.wsgi.application'
 
 
+# CORS Configuration - FIXED
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3004",  # For local development
-    "http://127.0.0.1:3000",  # Alternative localhost
-    "http://192.168.1.103:3004",  # Your current setting
+    "http://localhost:3000",    # React dev server default
+    "http://localhost:3001",    # Your React app port
+    "http://127.0.0.1:3000",   # Alternative localhost
+    "http://127.0.0.1:3001",   # Alternative localhost with your port
+    "http://192.168.1.103:3001",  # Your network IP
 ]
 
-# Or for development, temporarily use:
-CORS_ALLOW_ALL_ORIGINS = True  # Remove in production!
+# For development only - remove in production!
+CORS_ALLOW_ALL_ORIGINS = True
 
-# Or to allow all origins during development
-# CORS_ALLOW_ALL_ORIGINS = True
+# Allow credentials to be included in CORS requests
+CORS_ALLOW_CREDENTIALS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -124,6 +128,12 @@ REST_FRAMEWORK = {
     )
 }
 
+# JWT Settings - ADDED
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginForm.css';
 
-// Configure axios defaults
-axios.defaults.baseURL = 'http://127.0.0.1:8000/';
+// Configure axios defaults - FIXED
+axios.defaults.baseURL = 'http://localhost:8000/';  // Changed from 127.0.0.1 to localhost
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const LoginForm = () => {
@@ -24,6 +24,8 @@ const LoginForm = () => {
         setLoading(true);
         
         try {
+            console.log('Attempting login to:', axios.defaults.baseURL + 'api/login/');
+            
             const response = await axios.post('/api/login/', {
                 username,
                 password
@@ -59,12 +61,15 @@ const LoginForm = () => {
             if (err.response) {
                 // Server responded with error status
                 const errorData = err.response.data;
+                console.log('Server error response:', errorData);
                 setError(errorData.message || `Login failed: ${err.response.status}`);
             } else if (err.request) {
                 // Request was made but no response received
-                setError('Failed to connect to server. Please check if the server is running.');
+                console.log('No response from server:', err.request);
+                setError('Failed to connect to server. Please check if the Django server is running on http://localhost:8000');
             } else {
                 // Something else happened
+                console.log('Request setup error:', err.message);
                 setError(err.message || 'An unexpected error occurred');
             }
         } finally {
@@ -79,6 +84,8 @@ const LoginForm = () => {
         setLoading(true);
         
         try {
+            console.log('Attempting registration to:', axios.defaults.baseURL + 'api/register/');
+            
             const response = await axios.post('/api/register/', {
                 username,
                 email,
@@ -112,7 +119,7 @@ const LoginForm = () => {
                 setError(errorData.message || `Registration failed: ${err.response.status}`);
             } else if (err.request) {
                 // Request was made but no response received
-                setError('Failed to connect to server. Please check if the server is running.');
+                setError('Failed to connect to server. Please check if the Django server is running on http://localhost:8000');
             } else {
                 // Something else happened
                 setError(err.message || 'An unexpected error occurred');
@@ -248,7 +255,7 @@ const LoginForm = () => {
                     </p>
                 </div>
             </form>
-
+            
             {/* "Forget Password?" link positioned outside the form */}
             {view === 'login' && (
                 <div className="lost-password-link">
