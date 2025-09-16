@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForm.css';
 
-// Configure axios defaults - FIXED
-axios.defaults.baseURL = 'http://127.0.0.1:8000//';  // Changed from 127.0.0.1 to localhost
+// Configure axios defaults
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
     const [view, setView] = useState('login');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -35,21 +37,22 @@ const LoginForm = () => {
             
             if (data.success) {
                 console.log('Login successful:', data);
-                setMessage('Login successful! Welcome.');
+                setMessage('Login successful! Redirecting...');
                 
                 // Store tokens in localStorage
                 if (data.tokens) {
                     localStorage.setItem('access_token', data.tokens.access);
                     localStorage.setItem('refresh_token', data.tokens.refresh);
-                    // Also store as 'token' for compatibility
                     localStorage.setItem('token', data.tokens.access);
                 }
                 
                 // Store user data
                 localStorage.setItem('user', JSON.stringify(data.user));
                 
-                // For now, just show success message - no navigation
-                console.log('User logged in successfully, tokens stored');
+                // Navigate to the dashboard after a short delay
+                setTimeout(() => {
+                    navigate('/dashboard'); // 👈 THIS LINE HAS BEEN UPDATED
+                }, 1500); 
                 
             } else {
                 throw new Error(data.message || 'Login failed');
@@ -59,16 +62,13 @@ const LoginForm = () => {
             
             // Handle different types of errors
             if (err.response) {
-                // Server responded with error status
                 const errorData = err.response.data;
                 console.log('Server error response:', errorData);
                 setError(errorData.message || `Login failed: ${err.response.status}`);
             } else if (err.request) {
-                // Request was made but no response received
                 console.log('No response from server:', err.request);
                 setError('Failed to connect to server. Please check if the Django server is running on http://localhost:8000');
             } else {
-                // Something else happened
                 console.log('Request setup error:', err.message);
                 setError(err.message || 'An unexpected error occurred');
             }
@@ -114,14 +114,11 @@ const LoginForm = () => {
             
             // Handle different types of errors
             if (err.response) {
-                // Server responded with error status
                 const errorData = err.response.data;
                 setError(errorData.message || `Registration failed: ${err.response.status}`);
             } else if (err.request) {
-                // Request was made but no response received
                 setError('Failed to connect to server. Please check if the Django server is running on http://localhost:8000');
             } else {
-                // Something else happened
                 setError(err.message || 'An unexpected error occurred');
             }
         } finally {
@@ -230,7 +227,7 @@ const LoginForm = () => {
                         {loading ? 'Loading...' : (view === 'login' ? 'Login' : 'Register')}
                     </button>
                 </div>
-            
+                
                 {/* Switch between Login/Register */}
                 <div className='register-link'>
                     <p>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Plus, Trash2, Calculator, Save, Send, FileText, AlertCircle } from 'lucide-react';
 
 // Configure axios to match your existing setup
-axios.defaults.baseURL = 'http://127.0.0.1:8000//';
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 const QuotationForm = () => {
