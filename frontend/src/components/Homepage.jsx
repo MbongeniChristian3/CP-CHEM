@@ -31,8 +31,8 @@ const Header = ({ userInfo }) => (
     </div>
 );
 
-// New Sidebar Component
-const Sidebar = () => (
+// New Sidebar Component with navigation
+const Sidebar = ({ handleModuleClick }) => (
     <div style={styles.sidebar}>
         <div style={styles.logoContainer}>
             {/* Replace with your actual logo */}
@@ -41,35 +41,35 @@ const Sidebar = () => (
             <p style={styles.logoSubtitle}>Order Management</p>
         </div>
         <ul style={styles.sidebarMenu}>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/dashboard' })}>
                 <Home size={18} />
                 Home
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/dashboard' })}>
                 <List size={18} />
                 Dashboard
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/pos' })}>
                 <DollarSign size={18} />
                 POS System
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/add-product' })}>
                 <ShoppingBag size={18} />
                 Products
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/sales-orders' })}>
                 <ShoppingCart size={18} />
                 Orders
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/track-orders' })}>
                 <TruckIcon size={18} />
                 Track Orders
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/inventory' })}>
                 <Package size={18} />
                 Inventory
             </li>
-            <li style={styles.sidebarMenuItem}>
+            <li style={styles.sidebarMenuItem} onClick={() => handleModuleClick({ route: '/reports' })}>
                 <BarChart size={18} />
                 Reports
             </li>
@@ -82,16 +82,8 @@ const Homepage = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
 
-    // Static module data with routes
+    // Static module data with updated routes
     const modules = [
-        {
-            id: 'quotations',
-            name: 'Quotations',
-            description: 'Create and manage customer quotations.',
-            icon: FileText,
-            route: '/quotations',
-            color: 'bg-green-500'
-        },
         {
             id: 'customers',
             name: 'Customers',
@@ -101,11 +93,19 @@ const Homepage = () => {
             color: 'bg-purple-500'
         },
         {
+            id: 'products',
+            name: 'Products',
+            description: 'Add and manage your product catalog.',
+            icon: ShoppingBag,
+            route: '/add-product',
+            color: 'bg-green-500'
+        },
+        {
             id: 'orders',
-            name: 'Orders',
-            description: 'Process and track customer orders.',
+            name: 'Sales Orders',
+            description: 'Process and track sales orders.',
             icon: ShoppingCart,
-            route: '/orders',
+            route: '/sales-orders',
             color: 'bg-orange-500'
         },
         {
@@ -154,37 +154,8 @@ const Homepage = () => {
         }
     }, [navigate]);
 
-    const handleModuleClick = async (module) => {
-        if (module.id === 'quotations') {
-            const token = localStorage.getItem('access_token');
-
-            if (!token) {
-                alert('Authentication token not found. Please log in again.');
-                navigate('/login');
-                return;
-            }
-
-            try {
-                const response = await axios.get(
-                    'http://127.0.0.1:8000/api/quotations/',
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
-                console.log('Quotations data:', response.data);
-                navigate(module.route, { state: { quotations: response.data } });
-            } catch (error) {
-                console.error('Failed to fetch quotations:', error);
-                if (error.response && error.response.status === 401) {
-                    alert('Session expired or unauthorized. Please log in.');
-                    navigate('/login');
-                } else {
-                    alert('Failed to load quotations. Please try again.');
-                }
-            }
-        } else if (module.route) {
+    const handleModuleClick = (module) => {
+        if (module.route) {
             navigate(module.route);
         } else {
             alert(`${module.name} module is coming soon!`);
@@ -201,7 +172,7 @@ const Homepage = () => {
 
     return (
         <div style={styles.mainContainer}>
-            <Sidebar />
+            <Sidebar handleModuleClick={handleModuleClick} />
             <div style={styles.contentContainer}>
                 <Header userInfo={userInfo} />
                 <div style={styles.homepageContainer}>

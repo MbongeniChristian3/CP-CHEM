@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LoginForm.css';
@@ -19,6 +19,54 @@ const LoginForm = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // Add this useEffect hook to set up the axios interceptor
+    useEffect(() => {
+        const interceptor = axios.interceptors.response.use(
+            response => response,
+            async (err) => {
+                const originalRequest = err.config;
+                // Check if the error is a 401 and not a login attempt itself
+                if (err.response.status === 401 && !originalRequest._retry) {
+                    originalRequest._retry = true;
+                    try {
+                        const refreshToken = localStorage.getItem('refresh_token');
+                        if (!refreshToken) {
+                            // If no refresh token, redirect to login
+                            navigate('/');
+                            return Promise.reject(err);
+                        }
+
+                        // Request a new access token using the refresh token
+                        const res = await axios.post('/api/token/refresh/', {
+                            refresh: refreshToken
+                        });
+
+                        const newAccessToken = res.data.access;
+                        
+                        // Store the new access token and update axios headers
+                        localStorage.setItem('access_token', newAccessToken);
+                        localStorage.setItem('token', newAccessToken); // For backwards compatibility
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+
+                        // Retry the original request with the new token
+                        return axios(originalRequest);
+                    } catch (refreshErr) {
+                        console.error("Token refresh failed:", refreshErr);
+                        localStorage.clear();
+                        navigate('/');
+                        return Promise.reject(refreshErr);
+                    }
+                }
+                return Promise.reject(err);
+            }
+        );
+
+        // Clean up the interceptor when the component unmounts
+        return () => {
+            axios.interceptors.response.eject(interceptor);
+        };
+    }, [navigate]);
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
@@ -37,13 +85,14 @@ const LoginForm = () => {
             
             if (data.success) {
                 console.log('Login successful:', data);
-                setMessage('Login successful! Redirecting...');
+                setMessage('Login successful!');
                 
-                // Store tokens in localStorage
+                // Store tokens in localStorage and set auth header
                 if (data.tokens) {
                     localStorage.setItem('access_token', data.tokens.access);
                     localStorage.setItem('refresh_token', data.tokens.refresh);
                     localStorage.setItem('token', data.tokens.access);
+                    axios.defaults.headers.common['Authorization'] = `Bearer ${data.tokens.access}`;
                 }
                 
                 // Store user data
@@ -51,7 +100,7 @@ const LoginForm = () => {
                 
                 // Navigate to the dashboard after a short delay
                 setTimeout(() => {
-                    navigate('/dashboard'); // 👈 THIS LINE HAS BEEN UPDATED
+                    navigate('/dashboard');
                 }, 1500); 
                 
             } else {

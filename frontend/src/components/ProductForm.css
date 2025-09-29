@@ -1,0 +1,164 @@
+/* ProductCatalog.css */
+
+/* --- General Page and Containers --- */
+.product-catalog-page {
+    /* Use a darker background color from the screenshot */
+    background-color: #282c34;
+    font-family: Arial, sans-serif;
+    padding: 24px;
+    color: #abb2bf; /* Light gray text color */
+    min-height: 100vh; /* Ensure it fills the viewport */
+}
+
+/* --- Header Bar --- */
+.header-bar {
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #3e4452;
+}
+
+.header-bar h1 {
+    font-size: 2em;
+    font-weight: 500;
+    color: #e5c07b; /* Gold/yellow color for the title */
+    margin: 0;
+}
+
+/* --- Search and Filter Bar --- */
+.search-filter-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    background-color: #3e4452;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.search-input-group,
+.category-select-group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.search-filter-bar label.input-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #abb2bf;
+}
+
+.search-filter-bar input,
+.search-filter-bar select {
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #5c6370;
+    background-color: #21252b;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* --- Buttons --- */
+.button-primary {
+    background-color: #61afef; /* A vibrant blue to match the screenshot */
+    color: #282c34;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-primary:hover {
+    background-color: #569bd5;
+}
+
+.button-secondary {
+    background-color: #5c6370;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.button-secondary:hover {
+    background-color: #4a515a;
+}
+
+/* --- Product List Grid --- */
+.product-list-grid {
+    display: grid;
+    /* Adjust grid columns to match the screenshot layout */
+    grid-template-columns: 2fr 1.5fr 3fr 1.5fr 1fr;
+    gap: 0;
+    background-color: #3e4452;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.product-header,
+.product-row {
+    display: contents;
+}
+
+.product-header > div,
+.product-row > div {
+    padding: 12px 16px;
+    border-bottom: 1px solid #4a515a;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.product-header > div {
+    font-weight: 600;
+    color: #61afef;
+    background-color: #21252b;
+    position: sticky;
+    top: 0;
+}
+
+/* Row-specific styling */
+.product-row {
+    background-color: #3e4452; /* Match the main grid container color */
+}
+
+.product-row:nth-child(even) > div {
+    background-color: #313540; /* Slightly darker shade for alternating rows */
+}
+
+.product-row:hover > div {
+    background-color: #4a515a; /* A darker hover state */
+}
+
+.product-name-sku {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.product-name-sku strong {
+    color: #c678dd; /* Purple color for the product name */
+}
+
+.sku-text {
+    font-size: 0.8em;
+    color: #8d95a1;
+}
+
+/* --- Modals and Forms (TO BE MOVED TO ProductForm.css) --- */
+/* The styles for the modal overlay and the form itself are correct in your previous message. */
+/* Just make sure they are in a separate file (ProductForm.css) as your React code suggests. */
